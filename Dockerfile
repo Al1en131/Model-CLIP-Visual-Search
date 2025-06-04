@@ -1,20 +1,18 @@
+# Gunakan base image Python ringan
 FROM python:3.10-slim
 
+# Install git (dibutuhkan untuk clone dari GitHub)
+RUN apt-get update && apt-get install -y git
+
+# Set workdir
 WORKDIR /app
 
-# Install dependensi sistem yang dibutuhkan Pillow & torch
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libgl1-mesa-glx \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy dan install dependencies Python
+# Salin file requirements.txt dan install dependenasi
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy semua file project
+# Salin semua file project
 COPY . .
 
-EXPOSE 5000
-
+# Jalankan aplikasi Flask
 CMD ["python", "app.py"]
